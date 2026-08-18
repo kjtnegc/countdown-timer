@@ -130,6 +130,40 @@ body {
 
 /* =========================
 
+   横向き表示
+
+========================= */
+
+@media (orientation: landscape) {
+
+    .time {
+
+        font-size: 28vw;
+
+    }
+
+    .set-time-button {
+
+        margin-top: 10px;
+
+    }
+
+    .controls {
+
+        margin-top: 10px;
+
+    }
+
+    .reset-button {
+
+        margin-top: 10px;
+
+    }
+
+}
+
+/* =========================
+
    時間設定
 
 ========================= */
@@ -249,6 +283,48 @@ button:active {
     height: 42px;
 
     margin-top: 25px;
+
+}
+
+/* =========================
+
+   横向きでは
+
+   ボタンを少し小さく
+
+========================= */
+
+@media (orientation: landscape) {
+
+    .controls button {
+
+        width: 50px;
+
+        height: 50px;
+
+        font-size: 25px;
+
+    }
+
+    .set-time-button {
+
+        width: 100px;
+
+        height: 38px;
+
+        font-size: 14px;
+
+    }
+
+    .reset-button {
+
+        width: 100px;
+
+        height: 38px;
+
+        font-size: 14px;
+
+    }
 
 }
 
@@ -406,6 +482,118 @@ let running = false;
 
 /* =========================
 
+   画面スリープ防止
+
+========================= */
+
+let wakeLock = null;
+
+/*
+
+   Wake Lockを取得
+
+*/
+
+async function requestWakeLock() {
+
+    try {
+
+        if (
+
+            "wakeLock" in navigator
+
+        ) {
+
+            wakeLock =
+
+                await navigator
+
+                    .wakeLock
+
+                    .request("screen");
+
+        }
+
+    } catch (error) {
+
+        console.log(
+
+            "Wake Lock error:",
+
+            error
+
+        );
+
+    }
+
+}
+
+/*
+
+   Wake Lockを解除
+
+*/
+
+async function releaseWakeLock() {
+
+    if (wakeLock) {
+
+        try {
+
+            await wakeLock.release();
+
+        } catch (error) {
+
+            console.log(
+
+                "Wake Lock release error:",
+
+                error
+
+            );
+
+        }
+
+        wakeLock = null;
+
+    }
+
+}
+
+/*
+
+   iPhoneに戻ってきた時、
+
+   画面スリープ防止を再取得
+
+*/
+
+document.addEventListener(
+
+    "visibilitychange",
+
+    async function() {
+
+        if (
+
+            document.visibilityState ===
+
+            "visible" &&
+
+            running
+
+        ) {
+
+            await requestWakeLock();
+
+        }
+
+    }
+
+);
+
+/* =========================
+
    時間表示
 
 ========================= */
@@ -413,12 +601,6 @@ let running = false;
 function formatTime(seconds) {
 
     let sign = "";
-
-    /*
-
-       マイナス表示
-
-    */
 
     if (seconds < 0) {
 
@@ -480,7 +662,7 @@ function updateDisplay() {
 
 ========================= */
 
-function toggleTimer() {
+async function toggleTimer() {
 
     /*
 
@@ -496,6 +678,8 @@ function toggleTimer() {
 
         running = false;
 
+        await releaseWakeLock();
+
         return;
 
     }
@@ -508,13 +692,33 @@ function toggleTimer() {
 
     running = true;
 
-    timer = setInterval(function() {
+    /*
 
-        remainingSeconds--;
+       画面スリープ防止
 
-        updateDisplay();
+    */
 
-    }, 1000);
+    await requestWakeLock();
+
+    /*
+
+       1秒ごとにカウント
+
+    */
+
+    timer = setInterval(
+
+        function() {
+
+            remainingSeconds--;
+
+            updateDisplay();
+
+        },
+
+        1000
+
+    );
 
 }
 
@@ -525,12 +729,6 @@ function toggleTimer() {
 ========================= */
 
 function changeTime(amount) {
-
-    /*
-
-       動作中は変更しない
-
-    */
 
     if (running) {
 
@@ -556,17 +754,11 @@ function changeTime(amount) {
 
 /* =========================
 
-   時間設定画面
+   時間設定
 
 ========================= */
 
 function showSetting() {
-
-    /*
-
-       動作中は設定しない
-
-    */
 
     if (running) {
 
@@ -604,7 +796,7 @@ function showSetting() {
 
 /* =========================
 
-   時間設定
+   時間設定確定
 
 ========================= */
 
@@ -640,12 +832,6 @@ function setTime() {
 
         ) || 0;
 
-    /*
-
-       分と秒を合計
-
-    */
-
     initialSeconds =
 
         (minutes * 60)
@@ -655,12 +841,6 @@ function setTime() {
     remainingSeconds =
 
         initialSeconds;
-
-    /*
-
-       設定画面を閉じる
-
-    */
 
     document
 
@@ -678,7 +858,7 @@ function setTime() {
 
 ========================= */
 
-function resetTimer() {
+async function resetTimer() {
 
     clearInterval(timer);
 
@@ -686,11 +866,7 @@ function resetTimer() {
 
     running = false;
 
-    /*
-
-       設定した時間に戻す
-
-    */
+    await releaseWakeLock();
 
     remainingSeconds =
 
