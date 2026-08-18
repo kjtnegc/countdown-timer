@@ -6,183 +6,241 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport"
+
+content="width=device-width,
+
+initial-scale=1.0,
+
+maximum-scale=1.0,
+
+user-scalable=no">
 
 <title>Countdown Timer</title>
 
 <style>
 
+/* =========================
+
+   基本設定
+
+========================= */
+
 * {
 
-box-sizing: border-box;
+    box-sizing: border-box;
 
--webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
 
 }
 
-html, body {
+html,
 
-margin: 0;
+body {
 
-padding: 0;
+    margin: 0;
 
-width: 100%;
+    padding: 0;
 
-height: 100%;
+    width: 100%;
 
-overflow: hidden;
+    height: 100%;
 
-background: #000;
+    overflow: hidden;
 
-color: #fff;
+    background: #000;
 
-font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+    color: #fff;
+
+    font-family:
+
+        -apple-system,
+
+        BlinkMacSystemFont,
+
+        "Helvetica Neue",
+
+        sans-serif;
 
 }
 
 body {
 
-display: flex;
+    display: flex;
 
-justify-content: center;
+    justify-content: center;
 
-align-items: center;
+    align-items: center;
 
 }
+
+/* =========================
+
+   メイン画面
+
+========================= */
 
 .container {
 
-width: 100%;
+    width: 100%;
 
-height: 100%;
+    height: 100%;
 
-display: flex;
+    display: flex;
 
-flex-direction: column;
+    flex-direction: column;
 
-justify-content: center;
+    justify-content: center;
 
-align-items: center;
+    align-items: center;
 
 }
 
+/* =========================
+
+   時間表示
+
+========================= */
+
 .time {
 
-font-size: 22vw;
+    font-size: 22vw;
 
-font-weight: 300;
+    font-weight: 300;
 
-letter-spacing: -0.05em;
+    letter-spacing: -0.05em;
 
-font-variant-numeric: tabular-nums;
+    font-variant-numeric:
 
-white-space: nowrap;
+        tabular-nums;
+
+    white-space: nowrap;
+
+    user-select: none;
 
 }
 
 .time:active {
 
-opacity: 0.6;
+    opacity: 0.6;
 
 }
 
+/* =========================
+
+   ＋ − ボタン
+
+========================= */
+
 .controls {
 
-display: flex;
+    display: flex;
 
-gap: 25px;
+    gap: 25px;
 
-margin-top: 35px;
+    margin-top: 35px;
 
 }
 
 button {
 
-border: none;
+    border: none;
 
-background: #222;
+    background: #222;
 
-color: white;
+    color: white;
 
-border-radius: 50%;
+    border-radius: 50%;
 
-width: 65px;
+    width: 65px;
 
-height: 65px;
+    height: 65px;
 
-font-size: 32px;
+    font-size: 32px;
 
 }
 
 button:active {
 
-background: #555;
+    background: #555;
 
 }
 
+/* =========================
+
+   START / RESET
+
+========================= */
+
 .main-buttons {
 
-display: flex;
+    display: flex;
 
-gap: 15px;
+    gap: 15px;
 
-margin-top: 30px;
+    margin-top: 30px;
 
 }
 
 .main-buttons button {
 
-width: 120px;
+    width: 120px;
 
-height: 55px;
+    height: 55px;
 
-border-radius: 30px;
+    border-radius: 30px;
 
-font-size: 18px;
+    font-size: 18px;
+
+}
+
+/* =========================
+
+   時間設定
+
+========================= */
+
+.setting {
+
+    display: none;
+
+    margin-top: 25px;
+
+    gap: 10px;
+
+    align-items: center;
 
 }
 
 input {
 
-background: #222;
+    background: #222;
 
-color: white;
+    color: white;
 
-border: 1px solid #555;
+    border: 1px solid #555;
 
-border-radius: 10px;
+    border-radius: 10px;
 
-padding: 12px;
+    padding: 12px;
 
-font-size: 22px;
+    font-size: 22px;
 
-width: 90px;
+    width: 90px;
 
-text-align: center;
-
-}
-
-.setting {
-
-display: none;
-
-margin-top: 25px;
-
-gap: 10px;
-
-align-items: center;
+    text-align: center;
 
 }
 
 .setting button {
 
-width: 80px;
+    width: 80px;
 
-height: 50px;
+    height: 50px;
 
-border-radius: 25px;
+    border-radius: 25px;
 
-font-size: 18px;
+    font-size: 18px;
 
 }
 
@@ -194,179 +252,539 @@ font-size: 18px;
 
 <div class="container">
 
-<div id="time" class="time" onclick="showSetting()">05:00</div>
+    <!-- =====================
 
-<div id="setting" class="setting">
+         時間表示
 
-<input id="minutes" type="number" min="0" placeholder="分">
+    ====================== -->
 
-<span>分</span>
+    <div
 
-<input id="seconds" type="number" min="0" max="59" placeholder="秒">
+        id="time"
 
-<span>秒</span>
+        class="time"
 
-<button onclick="setTime()">SET</button>
+        onclick="showSetting()">
 
-</div>
+        05:00
 
-<div class="controls">
+    </div>
 
-<button onclick="changeTime(-60)">−</button>
+    <!-- =====================
 
-<button onclick="changeTime(60)">＋</button>
+         時間設定
 
-</div>
+    ====================== -->
 
-<div class="main-buttons">
+    <div
 
-<button id="startStopButton" onclick="toggleTimer()">START</button>
+        id="setting"
 
-<button onclick="resetTimer()">RESET</button>
+        class="setting">
 
-</div>
+        <input
+
+            id="minutes"
+
+            type="number"
+
+            min="0"
+
+            placeholder="分">
+
+        <span>分</span>
+
+        <input
+
+            id="seconds"
+
+            type="number"
+
+            min="0"
+
+            max="59"
+
+            placeholder="秒">
+
+        <span>秒</span>
+
+        <button onclick="setTime()">
+
+            SET
+
+        </button>
+
+    </div>
+
+    <!-- =====================
+
+         ＋ −
+
+    ====================== -->
+
+    <div class="controls">
+
+        <button
+
+            onclick="changeTime(-60)">
+
+            −
+
+        </button>
+
+        <button
+
+            onclick="changeTime(60)">
+
+            ＋
+
+        </button>
+
+    </div>
+
+    <!-- =====================
+
+         START / RESET
+
+    ====================== -->
+
+    <div class="main-buttons">
+
+        <button
+
+            id="startStopButton"
+
+            onclick="toggleTimer()">
+
+            START
+
+        </button>
+
+        <button
+
+            onclick="resetTimer()">
+
+            RESET
+
+        </button>
+
+    </div>
 
 </div>
 
 <script>
 
+/* =========================
+
+   タイマー変数
+
+========================= */
+
 let initialSeconds = 5 * 60;
 
-let remainingSeconds = initialSeconds;
+let remainingSeconds =
+
+    initialSeconds;
 
 let timer = null;
 
 let running = false;
 
+/* =========================
+
+   時間表示
+
+========================= */
+
 function formatTime(seconds) {
 
-const minutes = Math.floor(seconds / 60);
+    let sign = "";
 
-const secs = seconds % 60;
+    /*
 
-return String(minutes).padStart(2, "0")
+       マイナスの場合
 
-+ ":"
+    */
 
-+ String(secs).padStart(2, "0");
+    if (seconds < 0) {
+
+        sign = "-";
+
+        seconds =
+
+            Math.abs(seconds);
+
+    }
+
+    const minutes =
+
+        Math.floor(seconds / 60);
+
+    const secs =
+
+        seconds % 60;
+
+    return sign
+
+        + String(minutes)
+
+            .padStart(2, "0")
+
+        + ":"
+
+        + String(secs)
+
+            .padStart(2, "0");
 
 }
+
+/* =========================
+
+   画面更新
+
+========================= */
 
 function updateDisplay() {
 
-document.getElementById("time").textContent =
+    document
 
-formatTime(remainingSeconds);
+        .getElementById("time")
+
+        .textContent =
+
+            formatTime(
+
+                remainingSeconds
+
+            );
 
 }
+
+/* =========================
+
+   ＋ − ボタン
+
+========================= */
 
 function changeTime(amount) {
 
-if (running) return;
+    /*
 
-initialSeconds += amount;
+       動作中は変更しない
 
-if (initialSeconds < 0) {
+    */
 
-initialSeconds = 0;
+    if (running) {
+
+        return;
+
+    }
+
+    initialSeconds += amount;
+
+    /*
+
+       0秒未満にはしない
+
+    */
+
+    if (initialSeconds < 0) {
+
+        initialSeconds = 0;
+
+    }
+
+    remainingSeconds =
+
+        initialSeconds;
+
+    updateDisplay();
 
 }
 
-remainingSeconds = initialSeconds;
+/* =========================
 
-updateDisplay();
+   時間設定画面を表示
 
-}
+========================= */
 
 function showSetting() {
 
-if (running) return;
+    /*
 
-document.getElementById("setting").style.display = "flex";
+       動作中は設定できない
 
-document.getElementById("minutes").value =
+    */
 
-Math.floor(initialSeconds / 60);
+    if (running) {
 
-document.getElementById("seconds").value =
+        return;
 
-initialSeconds % 60;
+    }
+
+    document
+
+        .getElementById("setting")
+
+        .style.display = "flex";
+
+    /*
+
+       現在の時間を入力欄に表示
+
+    */
+
+    document
+
+        .getElementById("minutes")
+
+        .value =
+
+            Math.floor(
+
+                initialSeconds / 60
+
+            );
+
+    document
+
+        .getElementById("seconds")
+
+        .value =
+
+            initialSeconds % 60;
 
 }
+
+/* =========================
+
+   時間設定
+
+========================= */
 
 function setTime() {
 
-if (running) return;
+    /*
 
-const minutes =
+       動作中は変更しない
 
-parseInt(document.getElementById("minutes").value) || 0;
+    */
 
-const seconds =
+    if (running) {
 
-parseInt(document.getElementById("seconds").value) || 0;
+        return;
 
-initialSeconds =
+    }
 
-(minutes * 60) + seconds;
+    const minutes =
 
-remainingSeconds = initialSeconds;
+        parseInt(
 
-document.getElementById("setting").style.display = "none";
+            document
 
-updateDisplay();
+                .getElementById("minutes")
+
+                .value
+
+        ) || 0;
+
+    const seconds =
+
+        parseInt(
+
+            document
+
+                .getElementById("seconds")
+
+                .value
+
+        ) || 0;
+
+    /*
+
+       分 → 秒に変換
+
+    */
+
+    initialSeconds =
+
+        (minutes * 60)
+
+        + seconds;
+
+    remainingSeconds =
+
+        initialSeconds;
+
+    /*
+
+       設定画面を閉じる
+
+    */
+
+    document
+
+        .getElementById("setting")
+
+        .style.display = "none";
+
+    updateDisplay();
 
 }
 
-function startTimer() {
+/* =========================
 
-if (running) return;
+   START / STOP
 
-if (remainingSeconds <= 0) return;
+========================= */
 
-running = true;
+function toggleTimer() {
 
-timer = setInterval(function() {
+    /*
 
-remainingSeconds--;
+       =====================
 
-updateDisplay();
+       STOP
 
-function startTimer() {
+       =====================
 
-if (running) return;
+    */
 
-if (remainingSeconds <= 0) return;
+    if (running) {
 
-running = true;
+        clearInterval(timer);
 
-timer = setInterval(function() {
+        timer = null;
 
-remainingSeconds--;
+        running = false;
 
-updateDisplay();
+        document
 
-}, 1000);
+            .getElementById(
+
+                "startStopButton"
+
+            )
+
+            .textContent = "START";
+
+        return;
+
+    }
+
+    /*
+
+       =====================
+
+       START
+
+       =====================
+
+    */
+
+    running = true;
+
+    document
+
+        .getElementById(
+
+            "startStopButton"
+
+        )
+
+        .textContent = "STOP";
+
+    /*
+
+       1秒ごとに処理
+
+    */
+
+    timer =
+
+        setInterval(function() {
+
+            remainingSeconds--;
+
+            updateDisplay();
+
+            /*
+
+               0秒になっても
+
+               STOPしない
+
+               -01秒
+
+               -02秒
+
+               -03秒
+
+               ...
+
+               と続く
+
+            */
+
+        }, 1000);
 
 }
 
-}, 1000);
+/* =========================
 
-}
+   RESET
+
+========================= */
 
 function resetTimer() {
 
-clearInterval(timer);
+    /*
 
-timer = null;
+       タイマー停止
 
-running = false;
+    */
 
-remainingSeconds = initialSeconds;
+    clearInterval(timer);
 
-updateDisplay();
+    timer = null;
+
+    running = false;
+
+    /*
+
+       設定した時間に戻す
+
+    */
+
+    remainingSeconds =
+
+        initialSeconds;
+
+    /*
+
+       ボタン表示をSTARTに戻す
+
+    */
+
+    document
+
+        .getElementById(
+
+            "startStopButton"
+
+        )
+
+        .textContent = "START";
+
+    updateDisplay();
 
 }
+
+/* =========================
+
+   初期表示
+
+========================= */
 
 updateDisplay();
 
