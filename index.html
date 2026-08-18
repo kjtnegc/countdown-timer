@@ -104,7 +104,7 @@ body {
 
 .time {
 
-    font-size: 22vw;
+    font-size: 24vw;
 
     font-weight: 300;
 
@@ -118,79 +118,13 @@ body {
 
     user-select: none;
 
+    cursor: pointer;
+
 }
 
 .time:active {
 
-    opacity: 0.6;
-
-}
-
-/* =========================
-
-   ＋ − ボタン
-
-========================= */
-
-.controls {
-
-    display: flex;
-
-    gap: 25px;
-
-    margin-top: 35px;
-
-}
-
-button {
-
-    border: none;
-
-    background: #222;
-
-    color: white;
-
-    border-radius: 50%;
-
-    width: 65px;
-
-    height: 65px;
-
-    font-size: 32px;
-
-}
-
-button:active {
-
-    background: #555;
-
-}
-
-/* =========================
-
-   START / RESET
-
-========================= */
-
-.main-buttons {
-
-    display: flex;
-
-    gap: 15px;
-
-    margin-top: 30px;
-
-}
-
-.main-buttons button {
-
-    width: 120px;
-
-    height: 55px;
-
-    border-radius: 30px;
-
-    font-size: 18px;
+    opacity: 0.5;
 
 }
 
@@ -216,31 +150,105 @@ input {
 
     background: #222;
 
-    color: white;
+    color: #fff;
 
     border: 1px solid #555;
 
     border-radius: 10px;
 
-    padding: 12px;
+    padding: 10px;
 
-    font-size: 22px;
+    font-size: 20px;
 
-    width: 90px;
+    width: 75px;
 
     text-align: center;
 
 }
 
-.setting button {
+/* =========================
 
-    width: 80px;
+   ボタン共通
 
-    height: 50px;
+========================= */
+
+button {
+
+    border: none;
+
+    background: #222;
+
+    color: #fff;
 
     border-radius: 25px;
 
-    font-size: 18px;
+    font-size: 16px;
+
+}
+
+button:active {
+
+    background: #555;
+
+}
+
+/* =========================
+
+   SET TIME
+
+========================= */
+
+.set-time-button {
+
+    width: 110px;
+
+    height: 42px;
+
+    margin-top: 25px;
+
+}
+
+/* =========================
+
+   ＋ −
+
+========================= */
+
+.controls {
+
+    display: flex;
+
+    gap: 25px;
+
+    margin-top: 20px;
+
+}
+
+.controls button {
+
+    width: 60px;
+
+    height: 60px;
+
+    border-radius: 50%;
+
+    font-size: 30px;
+
+}
+
+/* =========================
+
+   RESET
+
+========================= */
+
+.reset-button {
+
+    width: 110px;
+
+    height: 42px;
+
+    margin-top: 25px;
 
 }
 
@@ -264,7 +272,7 @@ input {
 
         class="time"
 
-        onclick="showSetting()">
+        onclick="toggleTimer()">
 
         05:00
 
@@ -308,13 +316,31 @@ input {
 
         <span>秒</span>
 
-        <button onclick="setTime()">
+        <button
+
+            onclick="setTime()">
 
             SET
 
         </button>
 
     </div>
+
+    <!-- =====================
+
+         SET TIME
+
+    ====================== -->
+
+    <button
+
+        class="set-time-button"
+
+        onclick="showSetting()">
+
+        SET TIME
+
+    </button>
 
     <!-- =====================
 
@@ -344,31 +370,19 @@ input {
 
     <!-- =====================
 
-         START / RESET
+         RESET
 
     ====================== -->
 
-    <div class="main-buttons">
+    <button
 
-        <button
+        class="reset-button"
 
-            id="startStopButton"
+        onclick="resetTimer()">
 
-            onclick="toggleTimer()">
+        RESET
 
-            START
-
-        </button>
-
-        <button
-
-            onclick="resetTimer()">
-
-            RESET
-
-        </button>
-
-    </div>
+    </button>
 
 </div>
 
@@ -402,7 +416,7 @@ function formatTime(seconds) {
 
     /*
 
-       マイナスの場合
+       マイナス表示
 
     */
 
@@ -440,7 +454,7 @@ function formatTime(seconds) {
 
 /* =========================
 
-   画面更新
+   表示更新
 
 ========================= */
 
@@ -452,17 +466,61 @@ function updateDisplay() {
 
         .textContent =
 
-            formatTime(
+        formatTime(
 
-                remainingSeconds
+            remainingSeconds
 
-            );
+        );
 
 }
 
 /* =========================
 
-   ＋ − ボタン
+   START / STOP
+
+========================= */
+
+function toggleTimer() {
+
+    /*
+
+       STOP
+
+    */
+
+    if (running) {
+
+        clearInterval(timer);
+
+        timer = null;
+
+        running = false;
+
+        return;
+
+    }
+
+    /*
+
+       START
+
+    */
+
+    running = true;
+
+    timer = setInterval(function() {
+
+        remainingSeconds--;
+
+        updateDisplay();
+
+    }, 1000);
+
+}
+
+/* =========================
+
+   ＋ −
 
 ========================= */
 
@@ -482,12 +540,6 @@ function changeTime(amount) {
 
     initialSeconds += amount;
 
-    /*
-
-       0秒未満にはしない
-
-    */
-
     if (initialSeconds < 0) {
 
         initialSeconds = 0;
@@ -504,7 +556,7 @@ function changeTime(amount) {
 
 /* =========================
 
-   時間設定画面を表示
+   時間設定画面
 
 ========================= */
 
@@ -512,7 +564,7 @@ function showSetting() {
 
     /*
 
-       動作中は設定できない
+       動作中は設定しない
 
     */
 
@@ -528,23 +580,17 @@ function showSetting() {
 
         .style.display = "flex";
 
-    /*
-
-       現在の時間を入力欄に表示
-
-    */
-
     document
 
         .getElementById("minutes")
 
         .value =
 
-            Math.floor(
+        Math.floor(
 
-                initialSeconds / 60
+            initialSeconds / 60
 
-            );
+        );
 
     document
 
@@ -552,7 +598,7 @@ function showSetting() {
 
         .value =
 
-            initialSeconds % 60;
+        initialSeconds % 60;
 
 }
 
@@ -563,12 +609,6 @@ function showSetting() {
 ========================= */
 
 function setTime() {
-
-    /*
-
-       動作中は変更しない
-
-    */
 
     if (running) {
 
@@ -602,7 +642,7 @@ function setTime() {
 
     /*
 
-       分 → 秒に変換
+       分と秒を合計
 
     */
 
@@ -634,115 +674,11 @@ function setTime() {
 
 /* =========================
 
-   START / STOP
-
-========================= */
-
-function toggleTimer() {
-
-    /*
-
-       =====================
-
-       STOP
-
-       =====================
-
-    */
-
-    if (running) {
-
-        clearInterval(timer);
-
-        timer = null;
-
-        running = false;
-
-        document
-
-            .getElementById(
-
-                "startStopButton"
-
-            )
-
-            .textContent = "START";
-
-        return;
-
-    }
-
-    /*
-
-       =====================
-
-       START
-
-       =====================
-
-    */
-
-    running = true;
-
-    document
-
-        .getElementById(
-
-            "startStopButton"
-
-        )
-
-        .textContent = "STOP";
-
-    /*
-
-       1秒ごとに処理
-
-    */
-
-    timer =
-
-        setInterval(function() {
-
-            remainingSeconds--;
-
-            updateDisplay();
-
-            /*
-
-               0秒になっても
-
-               STOPしない
-
-               -01秒
-
-               -02秒
-
-               -03秒
-
-               ...
-
-               と続く
-
-            */
-
-        }, 1000);
-
-}
-
-/* =========================
-
    RESET
 
 ========================= */
 
 function resetTimer() {
-
-    /*
-
-       タイマー停止
-
-    */
 
     clearInterval(timer);
 
@@ -759,22 +695,6 @@ function resetTimer() {
     remainingSeconds =
 
         initialSeconds;
-
-    /*
-
-       ボタン表示をSTARTに戻す
-
-    */
-
-    document
-
-        .getElementById(
-
-            "startStopButton"
-
-        )
-
-        .textContent = "START";
 
     updateDisplay();
 
