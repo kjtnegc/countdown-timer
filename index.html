@@ -14,125 +14,175 @@
 
 * {
 
-    box-sizing: border-box;
+box-sizing: border-box;
 
-    -webkit-tap-highlight-color: transparent;
+-webkit-tap-highlight-color: transparent;
 
 }
 
 html, body {
 
-    margin: 0;
+margin: 0;
 
-    padding: 0;
+padding: 0;
 
-    width: 100%;
+width: 100%;
 
-    height: 100%;
+height: 100%;
 
-    overflow: hidden;
+overflow: hidden;
 
-    background: #000;
+background: #000;
 
-    color: #fff;
+color: #fff;
 
-    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
 
 }
 
 body {
 
-    display: flex;
+display: flex;
 
-    justify-content: center;
+justify-content: center;
 
-    align-items: center;
+align-items: center;
 
 }
 
 .container {
 
-    width: 100%;
+width: 100%;
 
-    height: 100%;
+height: 100%;
 
-    display: flex;
+display: flex;
 
-    flex-direction: column;
+flex-direction: column;
 
-    justify-content: center;
+justify-content: center;
 
-    align-items: center;
+align-items: center;
 
 }
 
 .time {
 
-    font-size: 22vw;
+font-size: 22vw;
 
-    font-weight: 300;
+font-weight: 300;
 
-    letter-spacing: -0.05em;
+letter-spacing: -0.05em;
 
-    font-variant-numeric: tabular-nums;
+font-variant-numeric: tabular-nums;
 
-    white-space: nowrap;
+white-space: nowrap;
+
+}
+
+.time:active {
+
+opacity: 0.6;
 
 }
 
 .controls {
 
-    display: flex;
+display: flex;
 
-    gap: 25px;
+gap: 25px;
 
-    margin-top: 35px;
+margin-top: 35px;
 
 }
 
 button {
 
-    border: none;
+border: none;
 
-    background: #222;
+background: #222;
 
-    color: white;
+color: white;
 
-    border-radius: 50%;
+border-radius: 50%;
 
-    width: 65px;
+width: 65px;
 
-    height: 65px;
+height: 65px;
 
-    font-size: 32px;
+font-size: 32px;
 
 }
 
 button:active {
 
-    background: #555;
+background: #555;
 
 }
 
 .main-buttons {
 
-    display: flex;
+display: flex;
 
-    gap: 15px;
+gap: 15px;
 
-    margin-top: 30px;
+margin-top: 30px;
 
 }
 
 .main-buttons button {
 
-    width: 120px;
+width: 120px;
 
-    height: 55px;
+height: 55px;
 
-    border-radius: 30px;
+border-radius: 30px;
 
-    font-size: 18px;
+font-size: 18px;
+
+}
+
+input {
+
+background: #222;
+
+color: white;
+
+border: 1px solid #555;
+
+border-radius: 10px;
+
+padding: 12px;
+
+font-size: 22px;
+
+width: 90px;
+
+text-align: center;
+
+}
+
+.setting {
+
+display: none;
+
+margin-top: 25px;
+
+gap: 10px;
+
+align-items: center;
+
+}
+
+.setting button {
+
+width: 80px;
+
+height: 50px;
+
+border-radius: 25px;
+
+font-size: 18px;
 
 }
 
@@ -144,23 +194,37 @@ button:active {
 
 <div class="container">
 
-    <div id="time" class="time">05:00</div>
+<div id="time" class="time" onclick="showSetting()">05:00</div>
 
-    <div class="controls">
+<div id="setting" class="setting">
 
-        <button onclick="changeTime(-60)">−</button>
+<input id="minutes" type="number" min="0" placeholder="分">
 
-        <button onclick="changeTime(60)">＋</button>
+<span>分</span>
 
-    </div>
+<input id="seconds" type="number" min="0" max="59" placeholder="秒">
 
-    <div class="main-buttons">
+<span>秒</span>
 
-        <button onclick="startTimer()">START</button>
+<button onclick="setTime()">SET</button>
 
-        <button onclick="resetTimer()">RESET</button>
+</div>
 
-    </div>
+<div class="controls">
+
+<button onclick="changeTime(-60)">−</button>
+
+<button onclick="changeTime(60)">＋</button>
+
+</div>
+
+<div class="main-buttons">
+
+<button onclick="startTimer()">START</button>
+
+<button onclick="resetTimer()">RESET</button>
+
+</div>
 
 </div>
 
@@ -176,83 +240,123 @@ let running = false;
 
 function formatTime(seconds) {
 
-    let sign = "";
+const minutes = Math.floor(seconds / 60);
 
-    if (seconds < 0) {
+const secs = seconds % 60;
 
-        sign = "-";
+return String(minutes).padStart(2, "0")
 
-        seconds = Math.abs(seconds);
++ ":"
 
-    }
-
-    const minutes = Math.floor(seconds / 60);
-
-    const secs = seconds % 60;
-
-    return sign
-
-        + String(minutes).padStart(2, "0")
-
-        + ":"
-
-        + String(secs).padStart(2, "0");
++ String(secs).padStart(2, "0");
 
 }
 
 function updateDisplay() {
 
-    document.getElementById("time").textContent =
+document.getElementById("time").textContent =
 
-        formatTime(remainingSeconds);
+formatTime(remainingSeconds);
 
 }
 
 function changeTime(amount) {
 
-    if (running) return;
+if (running) return;
 
-    initialSeconds += amount;
+initialSeconds += amount;
 
-    if (initialSeconds < 0) {
+if (initialSeconds < 0) {
 
-        initialSeconds = 0;
+initialSeconds = 0;
 
-    }
+}
 
-    remainingSeconds = initialSeconds;
+remainingSeconds = initialSeconds;
 
-    updateDisplay();
+updateDisplay();
+
+}
+
+function showSetting() {
+
+if (running) return;
+
+document.getElementById("setting").style.display = "flex";
+
+document.getElementById("minutes").value =
+
+Math.floor(initialSeconds / 60);
+
+document.getElementById("seconds").value =
+
+initialSeconds % 60;
+
+}
+
+function setTime() {
+
+if (running) return;
+
+const minutes =
+
+parseInt(document.getElementById("minutes").value) || 0;
+
+const seconds =
+
+parseInt(document.getElementById("seconds").value) || 0;
+
+initialSeconds =
+
+(minutes * 60) + seconds;
+
+remainingSeconds = initialSeconds;
+
+document.getElementById("setting").style.display = "none";
+
+updateDisplay();
 
 }
 
 function startTimer() {
 
-    if (running) return;
+if (running) return;
 
-    running = true;
+if (remainingSeconds <= 0) return;
 
-    timer = setInterval(function() {
+running = true;
 
-        remainingSeconds--;
+timer = setInterval(function() {
 
-        updateDisplay();
+remainingSeconds--;
 
-    }, 1000);
+updateDisplay();
+
+if (remainingSeconds <= 0) {
+
+clearInterval(timer);
+
+timer = null;
+
+running = false;
+
+}
+
+}, 1000);
 
 }
 
 function resetTimer() {
 
-    clearInterval(timer);
+clearInterval(timer);
 
-    timer = null;
+timer = null;
 
-    running = false;
+running = false;
 
-    remainingSeconds = initialSeconds;
+remainingSeconds = initialSeconds;
 
-    updateDisplay();
+updateDisplay();
 
 }
 
