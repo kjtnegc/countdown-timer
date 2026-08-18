@@ -332,13 +332,21 @@ remainingSeconds--;
 
 updateDisplay();
 
-if (remainingSeconds <= 0) {
+function startTimer() {
 
-clearInterval(timer);
+if (running) return;
 
-timer = null;
+if (remainingSeconds <= 0) return;
 
-running = false;
+running = true;
+
+timer = setInterval(function() {
+
+remainingSeconds--;
+
+updateDisplay();
+
+}, 1000);
 
 }
 
